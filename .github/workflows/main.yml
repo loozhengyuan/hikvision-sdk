@@ -1,0 +1,61 @@
+name: Main Workflow
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test-golang:
+    name: Test on Go ${{ matrix.go }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    # The Codecov server seems to be unstable and
+    # breaks frequently. The script will retry but
+    # this results in longer build minutes.
+    # https://github.com/codecov/codecov-action/issues/43
+    # https://github.com/codecov/codecov-action/issues/37
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        os:
+          # - macos-latest
+          # - windows-latest
+          - ubuntu-18.04
+        go:
+          - 1.12
+          - 1.13
+          - 1.14
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@v2
+
+    - name: Set up Go ${{ matrix.go }}
+      uses: actions/setup-go@v2-beta
+      with:
+        go-version: ${{ matrix.go }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Lint code
+      run: |
+        make lint
+
+    - name: Validate code
+      run: |
+        make vet
+
+    - name: Run tests
+      run: |
+        make test
+
+    # - name: Upload coverage report
+    #   uses: codecov/codecov-action@v1
+    #   with:
+    #     token: ${{ secrets.CODECOV_TOKEN }}
+    #     fail_ci_if_error: true
