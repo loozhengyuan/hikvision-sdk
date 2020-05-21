@@ -1,0 +1,10 @@
+#!/bin/bash
+# Shell script for linting and testing Golang code
+
+set -euxo pipefail
+
+# Check for linting errors
+make lint
+
+# Check for validation errors
+make vet
