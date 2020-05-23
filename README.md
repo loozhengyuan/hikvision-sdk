@@ -36,7 +36,6 @@ func main() {
 	// Create client object
 	c, err := hikvision.NewClient(
 		"YOUR_SERVER_HOST",
-		"http",
 		"YOUR_SERVER_USERNAME",
 		"YOUR_SERVER_PASSWORD",
 	)
@@ -44,13 +43,12 @@ func main() {
 		fmt.Printf("Error: %v\n", err)
 	}
 
-	// Print device info
-	d, _ := c.GetDeviceInfo()
-	output, err := xml.MarshalIndent(d, "", "    ")
+	// Send request
+	d, err := c.GetDeviceInfo()
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 	}
-	fmt.Println(string(output))
+	fmt.Println(d.StringIndent())
 }
 ```
 
