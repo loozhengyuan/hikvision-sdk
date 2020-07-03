@@ -2,7 +2,7 @@ package hikvision
 
 import (
 	"encoding/xml"
-	"log"
+	"net/url"
 
 	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
 )
@@ -11,13 +11,15 @@ import (
 // /ISAPI/System/time endpoint.
 // TODO: Returns XML_ResponseStatus when error
 func (c *Client) GetTime() (resource.Resource, error) {
-	// Set variables
-	method := "GET"
+	// Parse URL
 	path := "/ISAPI/System/time"
-	log.Println(method, path)
+	u, err := url.Parse(c.BaseURL + path)
+	if err != nil {
+		return nil, err
+	}
 
 	// Execute request
-	body, err := c.Get(path)
+	body, err := c.Get(u)
 	if err != nil {
 		return nil, err
 	}
@@ -34,14 +36,16 @@ func (c *Client) GetTime() (resource.Resource, error) {
 // PutTime executes a HTTP PUT request to the
 // /ISAPI/System/time endpoint.
 func (c *Client) PutTime(data *resource.XMLTime) (resource.Resource, error) {
-	// Set variables
-	method := "PUT"
+	// Parse URL
 	path := "/ISAPI/System/time"
-	log.Println(method, path)
+	u, err := url.Parse(c.BaseURL + path)
+	if err != nil {
+		return nil, err
+	}
 
 	// Execute request
 	var d resource.Resource = data
-	body, err := c.Put(path, &d)
+	body, err := c.Put(u, &d)
 	if err != nil {
 		return nil, err
 	}

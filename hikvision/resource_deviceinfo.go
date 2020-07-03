@@ -2,7 +2,7 @@ package hikvision
 
 import (
 	"encoding/xml"
-	"log"
+	"net/url"
 
 	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
 )
@@ -11,13 +11,15 @@ import (
 // /ISAPI/System/deviceInfo endpoint.
 // TODO: Returns XML_Response when error
 func (c *Client) GetDeviceInfo() (resource.Resource, error) {
-	// Set variables
-	method := "GET"
+	// Parse URL
 	path := "/ISAPI/System/deviceInfo"
-	log.Println(method, path)
+	u, err := url.Parse(c.BaseURL + path)
+	if err != nil {
+		return nil, err
+	}
 
 	// Execute request
-	body, err := c.Get(path)
+	body, err := c.Get(u)
 	if err != nil {
 		return nil, err
 	}

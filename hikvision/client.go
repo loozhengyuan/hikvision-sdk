@@ -13,31 +13,28 @@ import (
 
 // Client is a http.Client wrapper that handles authentication.
 type Client struct {
-	Client *http.Client
-	URL    *url.URL
+	Client  *http.Client
+	BaseURL string
 }
 
 // NewClient is a constructor for the Client object.
 func NewClient(host, username, password string) (*Client, error) {
+	u, err := url.Parse("http://" + host)
+	if err != nil {
+		return nil, err
+	}
 	return &Client{
 		Client: &http.Client{
 			Transport: NewAuthTransport(username, password),
 		},
-		URL: &url.URL{
-			Scheme: "http",
-			Host:   host,
-		},
+		BaseURL: u.String(),
 	}, nil
 }
 
 // Do executes a HTTP request.
-func (c *Client) Do(method, path string) ([]byte, error) {
-	// Get URL
-	c.URL.Path = path
-	url := c.URL.String()
-
+func (c *Client) Do(method string, u *url.URL) ([]byte, error) {
 	// Create request
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequest(method, u.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -58,11 +55,7 @@ func (c *Client) Do(method, path string) ([]byte, error) {
 }
 
 // DoWithBody executes a HTTP request containing a request body.
-func (c *Client) DoWithBody(method, path string, data resource.Resource) ([]byte, error) {
-	// Get URL
-	c.URL.Path = path
-	url := c.URL.String()
-
+func (c *Client) DoWithBody(method string, u *url.URL, data resource.Resource) ([]byte, error) {
 	// Handle data
 	var kind string
 	if data != nil {
@@ -86,7 +79,7 @@ func (c *Client) DoWithBody(method, path string, data resource.Resource) ([]byte
 	}
 
 	// Create request
-	req, err := http.NewRequest(method, url, b)
+	req, err := http.NewRequest(method, u.String(), b)
 	if err != nil {
 		return nil, err
 	}
@@ -112,11 +105,11 @@ func (c *Client) DoWithBody(method, path string, data resource.Resource) ([]byte
 }
 
 // Get executes a HTTP GET request.
-func (c *Client) Get(path string) ([]byte, error) {
-	return c.Do("GET", path)
+func (c *Client) Get(u *url.URL) ([]byte, error) {
+	return c.Do("GET", u)
 }
 
 // Put executes a HTTP PUT request.
-func (c *Client) Put(path string, data *resource.Resource) ([]byte, error) {
-	return c.DoWithBody("PUT", path, *data)
+func (c *Client) Put(u *url.URL, data *resource.Resource) ([]byte, error) {
+	return c.DoWithBody("PUT", u, *data)
 }
