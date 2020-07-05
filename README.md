@@ -58,4 +58,4 @@ There's still lots of work to be done! Only a small subset of the APIs are imple
 
 # License
 
-[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+[GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
