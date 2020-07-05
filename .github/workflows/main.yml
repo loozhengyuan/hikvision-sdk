@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         os:
-          # - macos-latest
           # - windows-latest
+          - macos-latest
           - ubuntu-latest
         go:
           # - 1.12
