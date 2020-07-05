@@ -4,11 +4,24 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 
 	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
+)
+
+var (
+	// ErrResponseNotOk is returned by Client.Get calls when the
+	// the API returns a response with a non-200 HTTP status code.
+	ErrResponseNotOk = errors.New("hikvision: response not ok")
+
+	// ErrParseErrorMessageFailure is returned by Client.Get calls
+	// when the API call is not successful but there the error
+	// message could not be successfully parsed.
+	ErrParseErrorMessageFailure = errors.New("hikvision: error parsing error message")
 )
 
 // Client is a http.Client wrapper that handles authentication.
@@ -51,6 +64,17 @@ func (c *Client) Do(method string, u *url.URL) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Handle non-success HTTP responses
+	// TODO: Check and handle JSON responses
+	if resp.StatusCode != http.StatusOK {
+		var e resource.XMLResponseStatus
+		if err := xml.Unmarshal(body, &e); err != nil {
+			return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+		}
+		return nil, fmt.Errorf("%w: %v", ErrResponseNotOk, e)
+	}
+
 	return body, nil
 }
 
