@@ -17,6 +17,7 @@ func TestHash_basic(t *testing.T) {
 	}
 	// Run test cases
 	for _, c := range cases {
+		c := c // capture range variable
 		t.Run(c.name, func(t *testing.T) {
 			t.Parallel()
 			got := Hash(c.input)
@@ -52,6 +53,7 @@ func TestNewChallenge_basic(t *testing.T) {
 	}
 	// Run test cases
 	for _, c := range cases {
+		c := c // capture range variable
 		t.Run(c.name, func(t *testing.T) {
 			t.Parallel()
 			got := NewChallenge(c.header)
@@ -91,6 +93,7 @@ func TestChallenge_Authorize_basic(t *testing.T) {
 	}
 	// Run test cases
 	for _, c := range cases {
+		c := c // capture range variable
 		t.Run(c.name, func(t *testing.T) {
 			t.Parallel()
 			got := c.challenge.Authorize(c.username, c.password, c.method, c.uri)
@@ -137,6 +140,7 @@ func TestResponse_String_basic(t *testing.T) {
 	}
 	// Run test cases
 	for _, c := range cases {
+		c := c // capture range variable
 		t.Run(c.name, func(t *testing.T) {
 			t.Parallel()
 			got := c.response.String()
