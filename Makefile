@@ -22,7 +22,8 @@ vet:
 	go vet -v ./...
 
 test:
-	go test -v -race -cover -coverprofile=coverage.txt -covermode=atomic ./...
+	go test -race -cover -coverprofile=coverage.out -covermode=atomic ./...
+	go tool cover -func=coverage.out
 
 docs:
 	go doc -all
@@ -41,4 +42,4 @@ clean-mod:
 	go clean -modcache
 
 clean-cov:
-	find . -type f -name 'coverage.txt' -exec rm -rf {} \;
+	find . -type f -name 'coverage.out' -exec rm -rf {} \;
