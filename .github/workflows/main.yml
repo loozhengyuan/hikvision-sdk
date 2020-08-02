@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os:
-          # - windows-latest
+          - windows-latest
           - macos-latest
           - ubuntu-latest
         go:
@@ -38,6 +38,8 @@ jobs:
           ${{ runner.os }}-go-
 
     - name: Lint code
+      # Gofmt will have different results on Windows due to line endings.
+      if: ${{ matrix.os != 'windows-latest' }}
       run: |
         make lint
 
