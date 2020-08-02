@@ -2,7 +2,7 @@
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/loozhengyuan/hikvision-sdk/hikvision)](https://pkg.go.dev/github.com/loozhengyuan/hikvision-sdk/hikvision)
 [![Go Report Card](https://goreportcard.com/badge/github.com/loozhengyuan/hikvision-sdk)](https://goreportcard.com/report/github.com/loozhengyuan/hikvision-sdk)
-![Main Workflow](https://github.com/loozhengyuan/hikvision-sdk/workflows/Main%20Workflow/badge.svg)
+![ci](https://github.com/loozhengyuan/hikvision-sdk/workflows/ci/badge.svg)
 
 > **Important**: This package is still under heavy development, only a partial implementation of the API is available.
 
