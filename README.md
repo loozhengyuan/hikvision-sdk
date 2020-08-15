@@ -52,6 +52,10 @@ func main() {
 		fmt.Printf("error: %v\n", err)
 	}
 	fmt.Printf("%+v\n", d)
+
+	// Print device information
+	fmt.Printf("Model: %s\n", d.Model)
+	fmt.Printf("Serial Number: %s\n", d.SerialNumber)
 }
 ```
 
