@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DeviceInfo version="1.0"
+	xmlns="http://www.hikvision.com/ver20/XMLSchema">
+	<deviceName>Embedded Net DVR</deviceName>
+	<deviceID>a3bb189e-8bf9-3888-9912-ace4e6543002</deviceID>
+	<model>DS-7654HQHI-SH</model>
+	<serialNumber>DS-7654HQHI-ABC123</serialNumber>
+	<macAddress>1a:2b:3c:4d:5e:6d</macAddress>
+	<firmwareVersion>V1.2.4</firmwareVersion>
+	<firmwareReleasedDate>build 000000</firmwareReleasedDate>
+	<encoderVersion>V1.0</encoderVersion>
+	<encoderReleasedDate>build 000000</encoderReleasedDate>
+	<deviceType>DVR</deviceType>
+	<telecontrolID>255</telecontrolID>
+</DeviceInfo>
