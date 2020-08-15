@@ -30,7 +30,6 @@ import "github.com/loozhengyuan/hikvision-sdk/hikvision"
 package main
 
 import (
-	"encoding/xml"
 	"fmt"
 
 	"github.com/loozhengyuan/hikvision-sdk/hikvision"
@@ -44,7 +43,7 @@ func main() {
 		"YOUR_SERVER_PASSWORD",
 	)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		fmt.Printf("error: %v\n", err)
 	}
 
 	// Send request
@@ -52,7 +51,7 @@ func main() {
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 	}
-	fmt.Println(d.StringIndent())
+	fmt.Printf("%+v\n", d)
 }
 ```
 
