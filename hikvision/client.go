@@ -22,7 +22,51 @@ var (
 	// when the API call is not successful but there the error
 	// message could not be successfully parsed.
 	ErrParseErrorMessageFailure = errors.New("hikvision: error parsing error message")
+
+	// ErrUnhandledContentType is returned when the Content-Type
+	// header is not unhandled by the client.
+	ErrUnhandledContentType = errors.New("hikvision: unhandled content type")
 )
+
+// ResponseStatus represents the XML_ResponseStatus and JSON_ResponseStatus resource.
+type ResponseStatus struct {
+	XMLName       xml.Name                     `xml:"ResponseStatus,omitempty"`
+	XMLVersion    string                       `xml:"version,attr"`
+	XMLNamespace  string                       `xml:"xmlns,attr"`
+	ID            int                          `xml:"id,omitempty" json:"id,omitempty"`
+	RequestURL    string                       `xml:"requestURL,omitempty" json:"requestURL,omitempty"`
+	StatusCode    int                          `xml:"statusCode,omitempty" json:"statusCode,omitempty"`
+	StatusString  string                       `xml:"statusString,omitempty" json:"statusString,omitempty"`
+	SubStatusCode string                       `xml:"subStatusCode,omitempty" json:"subStatusCode,omitempty"`
+	ErrorCode     int                          `xml:"errorCode,omitempty" json:"errorCode,omitempty"`
+	ErrorMsg      string                       `xml:"errorMsg,omitempty" json:"errorMsg,omitempty"`
+	AdditionalErr *ResponseStatusAdditionalErr `xml:"AdditionalErr,omitempty" json:"AdditionalErr,omitempty"`
+}
+
+// ResponseStatusAdditionalErr represents the additional error status, which is
+// valid when StatusCode is set to 9.
+type ResponseStatusAdditionalErr struct {
+	StatusList []ResponseStatusAdditionalErrStatus `xml:"StatusList,omitempty" json:"StatusList,omitempty"`
+}
+
+// ResponseStatusAdditionalErrStatus represents a single status information.
+type ResponseStatusAdditionalErrStatus struct {
+	Status string `xml:"Status,omitempty" json:"Status,omitempty"`
+}
+
+// ResponseStatusAdditionalErrStatusInfo represents information of status.
+type ResponseStatusAdditionalErrStatusInfo struct {
+	ID            string `xml:"id,omitempty" json:"id,omitempty"`
+	StatusCode    int    `xml:"statusCode,omitempty" json:"statusCode,omitempty"`
+	StatusString  string `xml:"statusString,omitempty" json:"statusString,omitempty"`
+	SubStatusCode string `xml:"subStatusCode,omitempty" json:"subStatusCode,omitempty"`
+	ErrorCode     int    `xml:"errorCode,omitempty" json:"errorCode,omitempty"`
+	ErrorMsg      string `xml:"errorMsg,omitempty" json:"errorMsg,omitempty"`
+}
+
+func (r *ResponseStatus) String() string {
+	return fmt.Sprintf("Status %v: %s", r.StatusCode, r.StatusString)
+}
 
 // Client is a http.Client wrapper that handles authentication.
 type Client struct {
@@ -66,15 +110,22 @@ func (c *Client) Do(method string, u *url.URL) ([]byte, error) {
 	}
 
 	// Handle non-success HTTP responses
-	// TODO: Check and handle JSON responses
 	if resp.StatusCode != http.StatusOK {
-		var e resource.XMLResponseStatus
-		if err := xml.Unmarshal(body, &e); err != nil {
-			return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+		e := ResponseStatus{}
+		switch ct := resp.Header.Get("Content-Type"); ct {
+		case `application/xml; charset="UTF-8"`:
+			if err := xml.Unmarshal(body, &e); err != nil {
+				return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+			}
+		case `application/json; charset="UTF-8"`:
+			if err := json.Unmarshal(body, &e); err != nil {
+				return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+			}
+		default:
+			return nil, fmt.Errorf("%w: %v", ErrUnhandledContentType, ct)
 		}
-		return nil, fmt.Errorf("%w: %v", ErrResponseNotOk, e)
+		return nil, fmt.Errorf("%w: %v", ErrResponseNotOk, e.String())
 	}
-
 	return body, nil
 }
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResponseStatus version="1.0"
+    xmlns="urn:psialliance-org">
+    <requestURL>/ISAPI/Security/email/parameter</requestURL>
+    <statusCode>4</statusCode>
+    <statusString>Invalid Operation</statusString>
+    <subStatusCode>notSupport</subStatusCode>
+</ResponseStatus>
