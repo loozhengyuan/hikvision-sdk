@@ -9,26 +9,19 @@ import (
 
 // GetDeviceInfo executes a HTTP GET request to the
 // /ISAPI/System/deviceInfo endpoint.
-// TODO: Returns XML_Response when error
-func (c *Client) GetDeviceInfo() (resource.Resource, error) {
-	// Parse URL
+func (c *Client) GetDeviceInfo() (resp *resource.XMLDeviceInfo, err error) {
 	path := "/ISAPI/System/deviceInfo"
 	u, err := url.Parse(c.BaseURL + path)
 	if err != nil {
 		return nil, err
 	}
-
-	// Execute request
 	body, err := c.Get(u)
 	if err != nil {
 		return nil, err
 	}
-
-	// Unmarshall data
-	var output resource.Resource = resource.NewXMLDeviceInfo()
-	err = xml.Unmarshal(body, &output)
+	err = xml.Unmarshal(body, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return output, nil
+	return resp, nil
 }
