@@ -9,8 +9,6 @@ import (
 	"os"
 	"reflect"
 	"testing"
-
-	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
 )
 
 func TestClient_GetDeviceInfoCapabilities(t *testing.T) {
@@ -73,7 +71,7 @@ func TestClient_GetDeviceInfoCapabilities(t *testing.T) {
 			}
 
 			// Unmarshal test fixture
-			var want *resource.XMLCapDeviceInfo
+			var want *XMLCapDeviceInfo
 			switch tc.encoding {
 			case "xml":
 				if err := xml.Unmarshal(b, &want); err != nil {

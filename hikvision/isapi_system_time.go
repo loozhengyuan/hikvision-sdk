@@ -7,9 +7,20 @@ import (
 	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
 )
 
+// XMLTime represents to XML_Time resource.
+type XMLTime struct {
+	XMLName           xml.Name `xml:"Time,omitempty"`
+	XMLVersion        string   `xml:"version,attr"`
+	XMLNamespace      string   `xml:"xmlns,attr"`
+	TimeMode          string   `xml:"timeMode,omitempty"`
+	LocalTime         string   `xml:"localTime,omitempty"`
+	TimeZone          string   `xml:"timeZone,omitempty"`
+	SatelliteInterval string   `xml:"satelliteInterval,omitempty"`
+}
+
 // GetTime executes a HTTP GET request to the
 // /ISAPI/System/time endpoint.
-func (c *Client) GetTime() (resp *resource.XMLTime, err error) {
+func (c *Client) GetTime() (resp *XMLTime, err error) {
 	path := "/ISAPI/System/time"
 	u, err := url.Parse(c.BaseURL + path)
 	if err != nil {
