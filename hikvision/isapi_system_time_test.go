@@ -71,7 +71,7 @@ func TestClient_GetTime(t *testing.T) {
 			}
 
 			// Unmarshal test fixture
-			var want *XMLTime
+			var want *Time
 			switch tc.encoding {
 			case "xml":
 				if err := xml.Unmarshal(b, &want); err != nil {

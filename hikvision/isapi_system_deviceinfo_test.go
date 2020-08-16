@@ -71,7 +71,7 @@ func TestClient_GetDeviceInfo(t *testing.T) {
 			}
 
 			// Unmarshal test fixture
-			var want *XMLDeviceInfo
+			var want *DeviceInfo
 			switch tc.encoding {
 			case "xml":
 				if err := xml.Unmarshal(b, &want); err != nil {

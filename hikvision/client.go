@@ -27,32 +27,32 @@ var (
 	ErrParseErrorMessageFailure = errors.New("hikvision: error parsing error message")
 )
 
-// XMLResponseStatus represents to XML_ResponseStatus resource.
-type XMLResponseStatus struct {
-	XMLName       xml.Name                        `xml:"ResponseStatus,omitempty"`
-	XMLVersion    string                          `xml:"version,attr"`
-	XMLNamespace  string                          `xml:"xmlns,attr"`
-	RequestURL    string                          `xml:"requestURL,omitempty"`
-	StatusCode    int                             `xml:"statusCode,omitempty"`
-	StatusString  string                          `xml:"statusString,omitempty"`
-	ID            int                             `xml:"id,omitempty"`
-	SubStatusCode string                          `xml:"subStatusCode,omitempty"`
-	ErrorCode     int                             `xml:"errorCode,omitempty"`
-	ErrorMsg      string                          `xml:"errorMsg,omitempty"`
-	AdditionalErr *XMLResponseStatusAdditionalErr `xml:"AdditionalErr,omitempty"`
+// ResponseStatus represents the XML_ResponseStatus and JSON_ResponseStatus resource.
+type ResponseStatus struct {
+	XMLName       xml.Name                     `xml:"ResponseStatus,omitempty"`
+	XMLVersion    string                       `xml:"version,attr"`
+	XMLNamespace  string                       `xml:"xmlns,attr"`
+	RequestURL    string                       `xml:"requestURL,omitempty" json:"requestURL,omitempty"`
+	StatusCode    int                          `xml:"statusCode,omitempty" json:"statusCode,omitempty"`
+	StatusString  string                       `xml:"statusString,omitempty" json:"statusString,omitempty"`
+	ID            int                          `xml:"id,omitempty" json:"id,omitempty"`
+	SubStatusCode string                       `xml:"subStatusCode,omitempty" json:"subStatusCode,omitempty"`
+	ErrorCode     int                          `xml:"errorCode,omitempty" json:"errorCode,omitempty"`
+	ErrorMsg      string                       `xml:"errorMsg,omitempty" json:"errorMsg,omitempty"`
+	AdditionalErr *ResponseStatusAdditionalErr `xml:"AdditionalErr,omitempty" json:"AdditionalErr,omitempty"`
 }
 
-// XMLResponseStatusAdditionalErr comment
-type XMLResponseStatusAdditionalErr struct {
-	StatusList []XMLResponseStatusAdditionalErrStatus `xml:"StatusList,omitempty"`
+// ResponseStatusAdditionalErr comment
+type ResponseStatusAdditionalErr struct {
+	StatusList []ResponseStatusAdditionalErrStatus `xml:"StatusList,omitempty" json:"StatusList,omitempty"`
 }
 
-// XMLResponseStatusAdditionalErrStatus comment
-type XMLResponseStatusAdditionalErrStatus struct {
-	ID            string `xml:"id,omitempty"`
-	StatusCode    int    `xml:"statusCode,omitempty"`
-	StatusString  string `xml:"statusString,omitempty"`
-	SubStatusCode string `xml:"subStatusCode,omitempty"`
+// ResponseStatusAdditionalErrStatus comment
+type ResponseStatusAdditionalErrStatus struct {
+	ID            string `xml:"id,omitempty" json:"id,omitempty"`
+	StatusCode    int    `xml:"statusCode,omitempty" json:"statusCode,omitempty"`
+	StatusString  string `xml:"statusString,omitempty" json:"statusString,omitempty"`
+	SubStatusCode string `xml:"subStatusCode,omitempty" json:"subStatusCode,omitempty"`
 }
 
 // Client is a http.Client wrapper that handles authentication.
@@ -93,7 +93,7 @@ func (c *Client) Do(r *http.Request) ([]byte, error) {
 	// Handle non-success HTTP responses
 	// TODO: Check and handle JSON responses
 	if resp.StatusCode != http.StatusOK {
-		var e XMLResponseStatus
+		var e ResponseStatus
 		if err := xml.Unmarshal(body, &e); err != nil {
 			return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
 		}
