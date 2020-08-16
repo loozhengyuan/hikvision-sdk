@@ -10,7 +10,7 @@ Hikvision Go SDK for Intelligence Security API (ISAPI).
 
 This implementation is heavily dependent on the [ISAPI Core Protocol](/resources/isapi.pdf). The latest available copy of this specification document was updated on Sep 2019.
 
-# Installation
+## Installation
 
 To install the SDK, use `go get` to fetch the latest version:
 
@@ -24,7 +24,7 @@ Once installed, you may import it directly into your Go application:
 import "github.com/loozhengyuan/hikvision-sdk/hikvision"
 ```
 
-# Usage
+## Usage
 
 ```go
 package main
@@ -59,10 +59,10 @@ func main() {
 }
 ```
 
-# Contributing
+## Contributing
 
 There's still lots of work to be done! Only a small subset of the APIs are implemented, so pull requests are welcome.
 
-# License
+## License
 
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
