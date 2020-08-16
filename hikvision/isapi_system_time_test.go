@@ -18,7 +18,7 @@ func TestClient_GetTime(t *testing.T) {
 		encoding string
 		fixture  string
 	}{
-		{"default", "xml", "./testdata/fixtures/isapi_system_time.xml"},
+		{"default", "xml", "./testdata/fixtures/Time.xml"},
 	}
 
 	// Run test cases

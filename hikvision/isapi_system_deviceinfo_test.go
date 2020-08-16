@@ -18,7 +18,7 @@ func TestClient_GetDeviceInfo(t *testing.T) {
 		encoding string
 		fixture  string
 	}{
-		{"default", "xml", "./testdata/fixtures/isapi_system_deviceinfo.xml"},
+		{"default", "xml", "./testdata/fixtures/DeviceInfo.xml"},
 	}
 
 	// Run test cases
