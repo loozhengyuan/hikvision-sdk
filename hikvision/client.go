@@ -29,6 +29,34 @@ var (
 	ErrParseErrorMessageFailure = errors.New("hikvision: error parsing error message")
 )
 
+// XMLResponseStatus represents to XML_ResponseStatus resource.
+type XMLResponseStatus struct {
+	XMLName       xml.Name                        `xml:"ResponseStatus,omitempty"`
+	XMLVersion    string                          `xml:"version,attr"`
+	XMLNamespace  string                          `xml:"xmlns,attr"`
+	RequestURL    string                          `xml:"requestURL,omitempty"`
+	StatusCode    int                             `xml:"statusCode,omitempty"`
+	StatusString  string                          `xml:"statusString,omitempty"`
+	ID            int                             `xml:"id,omitempty"`
+	SubStatusCode string                          `xml:"subStatusCode,omitempty"`
+	ErrorCode     int                             `xml:"errorCode,omitempty"`
+	ErrorMsg      string                          `xml:"errorMsg,omitempty"`
+	AdditionalErr *XMLResponseStatusAdditionalErr `xml:"AdditionalErr,omitempty"`
+}
+
+// XMLResponseStatusAdditionalErr comment
+type XMLResponseStatusAdditionalErr struct {
+	StatusList []XMLResponseStatusAdditionalErrStatus `xml:"StatusList,omitempty"`
+}
+
+// XMLResponseStatusAdditionalErrStatus comment
+type XMLResponseStatusAdditionalErrStatus struct {
+	ID            string `xml:"id,omitempty"`
+	StatusCode    int    `xml:"statusCode,omitempty"`
+	StatusString  string `xml:"statusString,omitempty"`
+	SubStatusCode string `xml:"subStatusCode,omitempty"`
+}
+
 // Client is a http.Client wrapper that handles authentication.
 type Client struct {
 	Client  *http.Client
