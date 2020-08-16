@@ -42,17 +42,25 @@ type ResponseStatus struct {
 	AdditionalErr *ResponseStatusAdditionalErr `xml:"AdditionalErr,omitempty" json:"AdditionalErr,omitempty"`
 }
 
-// ResponseStatusAdditionalErr comment
+// ResponseStatusAdditionalErr represents the additional error status, which is
+// valid when StatusCode is set to 9.
 type ResponseStatusAdditionalErr struct {
 	StatusList []ResponseStatusAdditionalErrStatus `xml:"StatusList,omitempty" json:"StatusList,omitempty"`
 }
 
-// ResponseStatusAdditionalErrStatus comment
+// ResponseStatusAdditionalErrStatus represents a single status information.
 type ResponseStatusAdditionalErrStatus struct {
+	Status string `xml:"Status,omitempty" json:"Status,omitempty"`
+}
+
+// ResponseStatusAdditionalErrStatusInfo represents information of status.
+type ResponseStatusAdditionalErrStatusInfo struct {
 	ID            string `xml:"id,omitempty" json:"id,omitempty"`
 	StatusCode    int    `xml:"statusCode,omitempty" json:"statusCode,omitempty"`
 	StatusString  string `xml:"statusString,omitempty" json:"statusString,omitempty"`
 	SubStatusCode string `xml:"subStatusCode,omitempty" json:"subStatusCode,omitempty"`
+	ErrorCode     int    `xml:"errorCode,omitempty" json:"errorCode,omitempty"`
+	ErrorMsg      string `xml:"errorMsg,omitempty" json:"errorMsg,omitempty"`
 }
 
 // Client is a http.Client wrapper that handles authentication.
