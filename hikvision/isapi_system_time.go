@@ -39,14 +39,13 @@ func (c *Client) GetTime() (resp *XMLTime, err error) {
 
 // PutTime executes a HTTP PUT request to the
 // /ISAPI/System/time endpoint.
-func (c *Client) PutTime(data *resource.XMLTime) (resp *resource.XMLResponseStatus, err error) {
+func (c *Client) PutTime(data *XMLTime) (resp *resource.XMLResponseStatus, err error) {
 	path := "/ISAPI/System/time"
 	u, err := url.Parse(c.BaseURL + path)
 	if err != nil {
 		return nil, err
 	}
-	var d resource.Resource = data
-	body, err := c.Put(u, &d)
+	body, err := c.PutXML(u, data)
 	if err != nil {
 		return nil, err
 	}
