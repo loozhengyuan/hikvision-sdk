@@ -1,0 +1,7 @@
+{
+    "requestURL": "/ISAPI/Security/email/parameter",
+    "statusCode": 4,
+    "statusString": "Invalid Operation",
+    "subStatusCode": "notSupport",
+    "errorCode": 0
+}

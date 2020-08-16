@@ -25,6 +25,10 @@ var (
 	// when the API call is not successful but there the error
 	// message could not be successfully parsed.
 	ErrParseErrorMessageFailure = errors.New("hikvision: error parsing error message")
+
+	// ErrUnhandledContentType is returned when the Content-Type
+	// header is not unhandled by the client.
+	ErrUnhandledContentType = errors.New("hikvision: unhandled content type")
 )
 
 // ResponseStatus represents the XML_ResponseStatus and JSON_ResponseStatus resource.
@@ -99,15 +103,22 @@ func (c *Client) Do(r *http.Request) ([]byte, error) {
 	}
 
 	// Handle non-success HTTP responses
-	// TODO: Check and handle JSON responses
 	if resp.StatusCode != http.StatusOK {
-		var e ResponseStatus
-		if err := xml.Unmarshal(body, &e); err != nil {
-			return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+		e := ResponseStatus{}
+		switch ct := resp.Header.Get("Content-Type"); ct {
+		case contentTypeXML:
+			if err := xml.Unmarshal(body, &e); err != nil {
+				return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+			}
+		case contentTypeJSON:
+			if err := json.Unmarshal(body, &e); err != nil {
+				return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
+			}
+		default:
+			return nil, fmt.Errorf("%w: %v", ErrUnhandledContentType, ct)
 		}
-		return nil, fmt.Errorf("%w: %v", ErrResponseNotOk, e)
+		return nil, fmt.Errorf("%w: %v", ErrResponseNotOk, fmt.Sprintf("Status %v: %s", e.StatusCode, e.StatusString))
 	}
-
 	return body, nil
 }
 
