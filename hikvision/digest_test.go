@@ -16,12 +16,12 @@ func TestHash_basic(t *testing.T) {
 		{"RFC2617ReferenceA2", "GET:/dir/index.html", "39aff3a2bab6126f332b942af96d3366"},
 	}
 	// Run test cases
-	for _, c := range cases {
-		c := c // capture range variable
-		t.Run(c.name, func(t *testing.T) {
+	for _, tc := range cases {
+		tc := tc // capture range variable
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got := Hash(c.input)
-			want := c.hash
+			got := Hash(tc.input)
+			want := tc.hash
 			if !reflect.DeepEqual(got, want) {
 				t.Errorf("got %+v want %+v", got, want)
 			}
@@ -52,12 +52,12 @@ func TestNewChallenge_basic(t *testing.T) {
 		},
 	}
 	// Run test cases
-	for _, c := range cases {
-		c := c // capture range variable
-		t.Run(c.name, func(t *testing.T) {
+	for _, tc := range cases {
+		tc := tc // capture range variable
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got := NewChallenge(c.header)
-			want := c.challenge
+			got := NewChallenge(tc.header)
+			want := tc.challenge
 			if !reflect.DeepEqual(got, want) {
 				t.Errorf("got %+v want %+v", got, want)
 			}
@@ -92,21 +92,21 @@ func TestChallenge_Authorize_basic(t *testing.T) {
 		},
 	}
 	// Run test cases
-	for _, c := range cases {
-		c := c // capture range variable
-		t.Run(c.name, func(t *testing.T) {
+	for _, tc := range cases {
+		tc := tc // capture range variable
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got := c.challenge.Authorize(c.username, c.password, c.method, c.uri)
+			got := tc.challenge.Authorize(tc.username, tc.password, tc.method, tc.uri)
 			want := &Response{
-				Username: c.username,
-				Realm:    c.challenge.Realm,
-				Nonce:    c.challenge.Nonce,
-				URI:      c.uri,
-				Qop:      c.challenge.Qop,
+				Username: tc.username,
+				Realm:    tc.challenge.Realm,
+				Nonce:    tc.challenge.Nonce,
+				URI:      tc.uri,
+				Qop:      tc.challenge.Qop,
 				Cnonce:   "0a4f113b",
 				Nc:       "00000001",
-				Response: c.response,
-				Opaque:   c.challenge.Opaque,
+				Response: tc.response,
+				Opaque:   tc.challenge.Opaque,
 			}
 			if !reflect.DeepEqual(got, want) {
 				t.Errorf("got %+v want %+v", got, want)
@@ -139,12 +139,12 @@ func TestResponse_String_basic(t *testing.T) {
 		},
 	}
 	// Run test cases
-	for _, c := range cases {
-		c := c // capture range variable
-		t.Run(c.name, func(t *testing.T) {
+	for _, tc := range cases {
+		tc := tc // capture range variable
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got := c.response.String()
-			want := c.header
+			got := tc.response.String()
+			want := tc.header
 			if !reflect.DeepEqual(got, want) {
 				t.Errorf("got %v want %v", got, want)
 			}
