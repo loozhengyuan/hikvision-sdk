@@ -3,8 +3,6 @@ package hikvision
 import (
 	"encoding/xml"
 	"net/url"
-
-	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
 )
 
 // XMLTime represents to XML_Time resource.
@@ -39,7 +37,7 @@ func (c *Client) GetTime() (resp *XMLTime, err error) {
 
 // PutTime executes a HTTP PUT request to the
 // /ISAPI/System/time endpoint.
-func (c *Client) PutTime(data *XMLTime) (resp *resource.XMLResponseStatus, err error) {
+func (c *Client) PutTime(data *XMLTime) (resp *XMLResponseStatus, err error) {
 	path := "/ISAPI/System/time"
 	u, err := url.Parse(c.BaseURL + path)
 	if err != nil {

@@ -9,8 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-
-	"github.com/loozhengyuan/hikvision-sdk/hikvision/resource"
 )
 
 const (
@@ -95,7 +93,7 @@ func (c *Client) Do(r *http.Request) ([]byte, error) {
 	// Handle non-success HTTP responses
 	// TODO: Check and handle JSON responses
 	if resp.StatusCode != http.StatusOK {
-		var e resource.XMLResponseStatus
+		var e XMLResponseStatus
 		if err := xml.Unmarshal(body, &e); err != nil {
 			return nil, fmt.Errorf("%w: %v", ErrParseErrorMessageFailure, string(body))
 		}
