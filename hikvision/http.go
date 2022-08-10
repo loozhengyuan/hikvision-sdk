@@ -56,7 +56,7 @@ func (t *AuthTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	c := NewChallenge(authChal)
 
 	// Generate digest response
-	authResp := c.Authorize(t.Username, t.Password, req.Method, req.RequestURI)
+	authResp := c.Authorize(t.Username, t.Password, req.Method, req.URL.RequestURI())
 
 	// We'll no longer use the initial response, so close it
 	resp.Body.Close()
